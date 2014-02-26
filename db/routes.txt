@@ -1,4 +1,3 @@
-route_id,agency_id,route_short_name,route_long_name,route_type,route_url,route_color,route_text_color
 1944,6216179,1,Santa Monica Blvd - Ucla,3,,,
 1945,6216179,2,Wilshire Blvd - Venice,3,,,
 1946,6216179,3,Montana Ave - Lincoln Blvd,3,,,
