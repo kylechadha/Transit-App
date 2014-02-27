@@ -54,12 +54,12 @@
 #   end
 # end
 
-StopTime.all.each do |stoptimes|
-  trip = Trip.find_by(gtfs_trip_id: stoptimes.gtfs_trip_id)
-  stoptimes.trip_id = trip.id
+# StopTime.all.each do |stoptimes|
+#   trip = Trip.find_by(gtfs_trip_id: stoptimes.gtfs_trip_id)
+#   stoptimes.trip_id = trip.id
 
-  stop = Stop.find_by(gtfs_stop_id: stoptimes.gtfs_stop_id)
-  stoptimes.stop_id = stop.id
+#   stop = Stop.find_by(gtfs_stop_id: stoptimes.gtfs_stop_id)
+#   stoptimes.stop_id = stop.id
 
-  stoptimes.save
-end
+#   stoptimes.save
+# end
