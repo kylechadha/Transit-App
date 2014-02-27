@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140226075231) do
+ActiveRecord::Schema.define(version: 20140227032021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,40 @@ ActiveRecord::Schema.define(version: 20140226075231) do
   end
 
   add_index "routes", ["agency_id"], name: "index_routes_on_agency_id", using: :btree
+
+  create_table "stop_times", force: true do |t|
+    t.string   "gtfs_trip_id"
+    t.time     "arrival_time"
+    t.time     "departure_time"
+    t.string   "gtfs_stop_id"
+    t.integer  "sequence"
+    t.string   "headsign"
+    t.integer  "pickup_type"
+    t.integer  "drop_off_type"
+    t.float    "shape_dist_traveled"
+    t.integer  "trip_id"
+    t.integer  "stop_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "stop_times", ["stop_id"], name: "index_stop_times_on_stop_id", using: :btree
+  add_index "stop_times", ["trip_id"], name: "index_stop_times_on_trip_id", using: :btree
+
+  create_table "stops", force: true do |t|
+    t.string   "gtfs_stop_id"
+    t.string   "code"
+    t.string   "name"
+    t.string   "desc"
+    t.float    "lat"
+    t.float    "lon"
+    t.string   "zone_id"
+    t.string   "url"
+    t.string   "location_type"
+    t.string   "parent_station"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "trips", force: true do |t|
     t.string   "gtfs_route_id"

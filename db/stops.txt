@@ -1,4 +1,3 @@
-stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url,location_type,parent_station
 1,WNDMNSEN,Windward Eb & Main Ns,100 Windward Ave & Main St,33.9879239,-118.4717181,,,,
 3,OCEPCONF,Ocean Nb & Pico Fs,1900 Ocean Ave & Pico Blvd,34.00812,-118.4908168,,,,
 4,004SMBNN,4Th Nb & Santa Monica Ns,1400 4Th St & Santa Monica Blvd,34.0163321,-118.4949244,,,,
