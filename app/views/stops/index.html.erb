@@ -66,6 +66,8 @@
         locationInfo = position.coords.latitude + ", " + position.coords.longitude;
         $('#locationDisplay').text(locationInfo);
 
+        $.get("/stops", {lat: position.coords.latitude, lon: position.coords.longitude}, null, 'script')
+
         var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&center=" + position.coords.latitude + "," +
                position.coords.longitude + "&zoom=14&size=300x400&markers=color:blue|label:S|" +
                position.coords.latitude + ',' + position.coords.longitude;
@@ -86,5 +88,8 @@
 
 <div>
   <h3>Here's a list of stops near you:</h3>
+
+  <div id="stops"></div>
+  
 
 </div>
