@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140227032021) do
+ActiveRecord::Schema.define(version: 20140227053016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,27 @@ ActiveRecord::Schema.define(version: 20140227032021) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "alerts", force: true do |t|
+    t.string   "alert_type"
+    t.string   "alert_distance"
+    t.integer  "journey_id"
+    t.integer  "stop_time_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "alerts", ["journey_id"], name: "index_alerts_on_journey_id", using: :btree
+  add_index "alerts", ["stop_time_id"], name: "index_alerts_on_stop_time_id", using: :btree
+
+  create_table "journeys", force: true do |t|
+    t.string   "name"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "journeys", ["user_id"], name: "index_journeys_on_user_id", using: :btree
 
   create_table "routes", force: true do |t|
     t.string   "gtfs_route_id"
@@ -94,5 +115,14 @@ ActiveRecord::Schema.define(version: 20140227032021) do
   end
 
   add_index "trips", ["route_id"], name: "index_trips_on_route_id", using: :btree
+
+  create_table "users", force: true do |t|
+    t.string   "email"
+    t.string   "name"
+    t.string   "password_salt"
+    t.string   "password_hash"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end
