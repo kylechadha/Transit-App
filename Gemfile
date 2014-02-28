@@ -12,11 +12,13 @@ gem 'bootstrap-sass', '~> 3.1.0'
 
 # Use Guard LiveReload to auto update your views, and pry to debug
 group :development do
-  gem 'pry'
   gem 'guard'
   gem 'guard-livereload', require: false
   gem 'rack-livereload'
 end
+
+# Use Pry to debug
+gem 'pry'
 
 # Use Geokit to do distance and radius calculations
 gem 'geokit-rails'
@@ -45,7 +47,6 @@ group :doc do
 end
 
 group :test do
-  gem 'pry'
   gem 'rspec-rails'
 end
 

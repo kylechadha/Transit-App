@@ -1,0 +1,15 @@
+<h3>And here's the unique routes they correspond to:</h3>
+
+<% routes_array = [] %>
+<% @nearby.each do |stop| %>
+  <% stop.routes.distinct.each do |route| %>
+    <% route_record = "Route #{route.short_name}: #{route.long_name}" %>
+    <% routes_array.push(route_record) %>
+  <% end %>
+<% end %>
+
+<ul>
+<% routes_array.uniq.each do |record| %>
+  <li><%= record %></li>
+<% end %>
+</ul>

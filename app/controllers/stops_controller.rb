@@ -2,7 +2,7 @@ class StopsController < ApplicationController
 
   def index
     @stops = Stop.all
-    @stopInfo = Stop.within(0.2, :origin => [params[:lat], params[:lon]])
+    @nearby = Stop.by_distance(:origin => [params[:lat], params[:lon]]).limit(10)
 
     respond_to do |format|
       format.html
