@@ -34,12 +34,12 @@ describe Stop do
         expect(stop.valid?).to eq false
       end
     end
-    # context 'If lon is not numeric' do
-    #   it 'Stop is not valid' do
-    #     stop = Stop.new(@valid_attributes.merge(lon: 'test'))
-    #     expect(stop.valid?).to eq false
-    #   end
-    # end
+    context 'If lon is not numeric' do
+      it 'Stop is not valid' do
+        stop = Stop.new(@valid_attributes.merge(lon: 'test'))
+        expect(stop.valid?).to eq false
+      end
+    end
 
 
   end
