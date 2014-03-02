@@ -11,8 +11,12 @@
 <ul>
 <% routes_array.uniq.each do |record| %>
   <li><%= "Route #{record.short_name}: #{record.long_name}" %>
-    <%= record.outbound ? '<li style="list-style-type:circle; list-style-position: inside"><span class="glyphicon glyphicon-chevron-right"></span>'.html_safe + record.outbound + '</li>'.html_safe : "" %>
-    <%= record.inbound ? '<li style="list-style-type:circle; list-style-position: inside"><span class="glyphicon glyphicon-chevron-left"></span>'.html_safe + record.inbound + '</li>'.html_safe : "" %>    
+    <%= link_to stops_end_path(record) do %>
+      <%= record.outbound ? '<li style="list-style-type:circle; list-style-position: inside"><span class="glyphicon glyphicon-chevron-right"></span>'.html_safe + record.outbound + '</li>'.html_safe : "" %>
+    <% end %>
+    <%= link_to stops_end_path(record) do %>
+      <%= record.inbound ? '<li style="list-style-type:circle; list-style-position: inside"><span class="glyphicon glyphicon-chevron-left"></span>'.html_safe + record.inbound + '</li>'.html_safe : "" %>    
+    <% end %>
   </li>
 <% end %>
 </ul>
