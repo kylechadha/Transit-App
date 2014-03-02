@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140227053016) do
+ActiveRecord::Schema.define(version: 20140302191715) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -59,11 +59,11 @@ ActiveRecord::Schema.define(version: 20140227053016) do
     t.string   "url"
     t.string   "color"
     t.string   "text_color"
-    t.string   "outbound"
-    t.string   "inbound"
     t.integer  "agency_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "outbound"
+    t.string   "inbound"
   end
 
   add_index "routes", ["agency_id"], name: "index_routes_on_agency_id", using: :btree
