@@ -1,50 +1,52 @@
 <h3>And here's the unique routes they correspond to:</h3>
 
 <% routes_array = [] %>
-trips_array_outbound = []
-trips_array_inbound = []
-outbound_headsign_frequency = {}
-outbound_headsign = ""
-outbound_route_headsign = {}
+<% outbound_route_headsign = {} %>
+<% inbound_route_headsign = {} %>
 
 <% @nearby.each do |stop| %>
-  stop.routes.distinct.each do |route|
-    <% route_record = "Route #{route.short_name}: #{route.long_name}" %>
-    <% routes_array.push(route_record) %>
+  <% stop.routes.distinct.each do |route| %>
+    <%# route_record = "Route #{route.short_name}: #{route.long_name}" %>
+    <%# routes_array.push(route_record) %>
+
+    <% routes_array.push(route) %>
     
-    trips_array_outbound = []
-    trips_array_inbound = []
-    outbound_headsign_frequency = {}
-    outbound_headsign = ""
+    <% trips_array_outbound = [] %>
+    <% outbound_headsign_frequency = {} %>
+    <% outbound_headsign = "" %>
 
-    route.trips.each do |trip|
-      if trip.headsign != ""
-        if trip.direction_id == 0
-          trips_array_outbound.push(trip.headsign)
-        elsif trip.direction_id == 1
-          trips_array_inbound.push(trip.headsign)
-        end
-      end
-    end
+    <% trips_array_inbound = [] %>
+    <% inbound_headsign_frequency = {} %>
+    <% inbound_headsign = "" %>
 
-    outbound_headsign_frequency = trips_array_outbound.inject(Hash.new(0)) { |k,v| k[v] += 1; k }
-    outbound_headsign = trips_array_outbound.max_by { |v| outbound_headsign_frequency[v] }
-    puts outbound_headsign
+    <% route.trips.each do |trip| %>
+      <% if trip.headsign != "" %>
+        <% if trip.direction_id == 0 %>
+          <% trips_array_outbound.push(trip.headsign) %>
+        <% elsif trip.direction_id == 1 %>
+          <% trips_array_inbound.push(trip.headsign) %>
+        <% end %>
+      <% end %>
+    <% end %>
 
-    outbound_route_headsign[route.id] = outbound_headsign
+    <% outbound_headsign_frequency = trips_array_outbound.inject(Hash.new(0)) { |k,v| k[v] += 1; k } %>
+    <% outbound_headsign = trips_array_outbound.max_by { |v| outbound_headsign_frequency[v] } %>
 
-  end
-end
+    <% outbound_route_headsign[route.id] = outbound_headsign %>
 
+    <% inbound_headsign_frequency = trips_array_inbound.inject(Hash.new(0)) { |k,v| k[v] += 1; k } %>
+    <% inbound_headsign = trips_array_inbound.max_by { |v| inbound_headsign_frequency[v] } %>
 
+    <% inbound_route_headsign[route.id] = inbound_headsign %>
 
   <% end %>
 <% end %>
 
-
-
 <ul>
 <% routes_array.uniq.each do |record| %>
-  <li><span class="glyphicon glyphicon-chevron-up"></span><span class="glyphicon glyphicon-chevron-down"></span> <%= record %></li>
+  <li><%= "Route #{record.short_name}: #{record.long_name}" %>
+    <li style="list-style-type:circle; list-style-position: inside"><span class="glyphicon glyphicon-chevron-left"></span> <%= outbound_route_headsign[record.id] %></li>
+    <li style="list-style-type:circle; list-style-position: inside"><span class="glyphicon glyphicon-chevron-right"></span> <%= inbound_route_headsign[record.id] %></li>
+  </li>
 <% end %>
 </ul>

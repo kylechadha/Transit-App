@@ -59,6 +59,8 @@ ActiveRecord::Schema.define(version: 20140227053016) do
     t.string   "url"
     t.string   "color"
     t.string   "text_color"
+    t.string   "outbound"
+    t.string   "inbound"
     t.integer  "agency_id"
     t.datetime "created_at"
     t.datetime "updated_at"
