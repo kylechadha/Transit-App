@@ -1,6 +1,6 @@
 TransitAppThree::Application.routes.draw do
 
-  get 'stops/end', :to => "stops#end"
+  get 'stops/end/:id', :to => "stops#end", as: "stops_end"
 
   resources :welcome, only: [:index]
   resources :users, only: [:index, :show, :create, :new]
