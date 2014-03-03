@@ -10,16 +10,17 @@ class StopsController < ApplicationController
     end
   end
 
-  def end
+  def destination
     @route = Route.find(params[:id])
     @direction = params[:direction]
-    @trips = @route.trips.where(direction_id: params[:direction])
+    trips = @route.trips.where(direction_id: params[:direction])
 
-    @trips_hash = {}
-    @trips.each do |trip|
-      @trips_hash[trip.id] = trip.stop_times.count
+    trips_hash = {}
+    trips.each do |trip|
+      trips_hash[trip] = trip.stop_times.count
     end
-    @trip = @trips_hash.select{|k, v| v == @trips_hash.values.max }
+    longest_trip = trips_hash.select{|k, v| v == trips_hash.values.max }
+    @trip = longest_trip.keys.sample
 
   end
 end
