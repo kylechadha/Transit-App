@@ -1,4 +1,8 @@
 class Alert < ActiveRecord::Base
+
+  validates :alert_distance, :journey_id, :stop_time_id, presence:true
+  validates :alert_distance, numericality:true
+
   belongs_to :journey
   belongs_to :stop_time
 
