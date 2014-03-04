@@ -2,8 +2,11 @@ class StopsController < ApplicationController
 
   def index
     @stops = Stop.all
+  end
+
+  def selection
+    @stops = Stop.all
     @nearby = Stop.by_distance(:origin => [params[:lat], params[:lon]]).limit(16)
-    
 
     respond_to do |format|
       format.html
