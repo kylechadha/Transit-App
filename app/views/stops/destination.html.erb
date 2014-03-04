@@ -16,8 +16,22 @@ Direction ID: <%= @trip.direction_id %><br><br>
 <%= params[:lat] %>
 <%= params[:lon] %>
 
-
-
+<table class="table table-striped">
+  <tr>
+    <th>Stop ID</th>
+    <th>Stop Name</th>
+    <th>Stop Lat</th>
+    <th>Stop Lon</th>
+  </tr>
+  <% @stop_sequence.each do |stop| %>
+    <tr>
+      <td><%= stop.id %></td>
+      <td><%= stop.name %></td>
+      <td><%= stop.lat %></td>
+      <td><%= stop.lon %></td>
+    </tr>
+  <% end %>
+</table>
 
 <br><br><br>
 

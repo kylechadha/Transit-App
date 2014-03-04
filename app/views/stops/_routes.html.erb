@@ -17,7 +17,7 @@
     <%= link_to stops_destination_path(id: record, direction: 1, lat: params[:lat], lon: params[:lon] ) do %>
       <%= record.outbound ? '<li style="list-style-type:circle; list-style-position: inside"><span class="glyphicon glyphicon-chevron-right"></span>'.html_safe + record.outbound + '</li>'.html_safe : "" %>
     <% end %>
-    <%= link_to stops_destination_path(id: record, direction: 0) do %>
+    <%= link_to stops_destination_path(id: record, direction: 0, lat: params[:lat], lon: params[:lon]) do %>
       <%= record.inbound ? '<li style="list-style-type:circle; list-style-position: inside"><span class="glyphicon glyphicon-chevron-left"></span>'.html_safe + record.inbound + '</li>'.html_safe : "" %>    
     <% end %>
   </li>
