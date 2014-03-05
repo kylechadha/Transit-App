@@ -1,6 +1,7 @@
 class Route < ActiveRecord::Base
   belongs_to :agency
   has_many :trips
+  has_many :stops, through: :trips  
 
   # If you want to change the URL that is displayed to a user, you can change "to_param"
   # def to_param
