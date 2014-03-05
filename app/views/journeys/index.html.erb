@@ -1,0 +1,54 @@
+<!-- Required for geolocation tracking?? TBD -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<script>
+
+// FIGURE THIS OUT:
+var end_stop_lat = find_by(this.stop.lat);
+var end_stop_lon = find_by(this.stop.lon);
+
+var end_stop_geolocation[end_stop_lat, end_stop_lon];
+
+// FROM EXAMPLE
+function startTracking(end_stop_geolocation) {
+// Clear position watch
+  navigator.geolocation.clearWatch(watchPositionId);
+// Start watching location
+  watchPositionId = navigator.geolocation.watchPosition(show_rider_location, showError, { enableHighAccuracy: false, maximumAge: 60000, timeout: 30000 });
+}
+
+function showRiderLocation(position) {
+  // From Example
+  var currentDistance;
+  currentDistance = calculateDistance(position.coords.latitude, position.coords.longitude...figure out what goes);
+  var timestampDate = new Date(position.timestamp);
+  // From Example: show geolocation results
+  var geoloactionResults = "Position (latitude, longitude): " + position.coords.latitude + ', ' + position.coords.longitude;
+}
+
+function calculateDistance(latitude2, latitude1, longitude2,longitude1, alert_distance) {
+// Calculate distance between end stop and current location - Haversine formula
+  // FIGURE THIS OUT
+  latitude2 = end_stop_lat = this.stop.lat;
+  latitude1 = end_stop_lon = this.stop.lon;
+  alert_distance = @alert.alert_distance;
+
+  // FROM EXAMPLE
+  var earthRadius = 3961.3; // Radius of the earth in miles
+  var dLatitude = convertToRadian(latitude2 - latitude1);
+  var dLongitude = convertToRadian(longitude2 - longitude1);
+  var a = Math.sin(dLatitude / 2) * Math.sin(dLatitude / 2) + Math.cos(convertToRadian(latitude1)) * Math.cos(convertToRadian(latitude2)) * Math.sin(dLongitude / 2) * Math.sin(dLongitude / 2);
+  var greatCircleDistance = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var distance = earthRadius * greatCircleDistance; // distance converted to miles from radians
+  return distance;
+
+  // Check distance against alert_distance
+  if (distance < alert_distance) {
+    // PING
+    // cancel watch
+  };
+
+}
+
+</script>
+
+<h1>Journeys</h1>
