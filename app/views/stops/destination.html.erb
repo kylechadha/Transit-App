@@ -1,5 +1,3 @@
-
-
 <h2>Well hello there, you've reached the destination selection page!</h2>
 <br>
 <h4>Here's the route & direction that brought you here:</h4>
@@ -13,18 +11,15 @@ GTFS Trip ID: <%= @trip.gtfs_trip_id %><br>
 Direction ID: <%= @trip.direction_id %><br><br>
 
 <h4>Here's the closest stop on Route <%= @route.short_name %> towards <%= @direction == "0" ? @route.inbound : @route.outbound %>. We'll assume this is the one our passenger is starting on.</h4>
+<%= @starting_stop.name %>
 
-<p>**Pass lat lon from previous page as params**<br>Use to do an AREL query for stops where stop.routes = current route ID && stop.trips.direction_id = current direction (or perhaps stop.trip = selected trip)</p>
-<%= params[:lat] %>
-<%= params[:lon] %>
+<br><br>
+<h4>Holy crap somehow we found the sequence:</h4>
+<ul>
+  <% @remaining_stops.each do |stops| %>
+  <li><%= Stop.find(stops.stop_id).name %></li>
+  <% end %>
 
-
-
-
-<br><br><br>
-
-Filtered by the current route, determine the closest stop on that route
-Find the matching stop ID on the trip.stoptime.sequence, then return the sequence
-<br>
-Increment sequence, and return the stop id so you have a list of stop IDs
-Then show the stop names for each of those stop IDs
+  <!-- add ( link_to 'stop name', new_alert_path, method: :post ) based on selected end stop -->
+  
+</ul>
