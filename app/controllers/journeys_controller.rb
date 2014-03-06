@@ -19,6 +19,7 @@ class JourneysController < ApplicationController
     # Find all the trips that are on the selected route, and in the selected direction
     trips = @route.trips.where(direction_id: params[:direction])
 
+    ## Put all Trip related calculations in the Trip model ##
     # Store the count of stops (via stop_times) in hash with each trip
     trips_hash = {}
     trips.each do |trip|
@@ -40,7 +41,7 @@ class JourneysController < ApplicationController
     @remaining_stops = StopTime.where(trip_id: @trip.id).where("sequence >= ?", starting_seq.sequence).order('sequence ASC')
 
     # Save the journey
-    @journey = Journey.new(name: route, direction: headsign, start_lat: journey_params[:lat], start_lon: journey_params[:lon], trip: @trip)
+    @journey = Journey.new(name: route, direction: headsign, start_lat: journey_params[:lat], start_lon: journey_params[:lon], trip_id: @trip.id)
     @journey.save
   end
   
