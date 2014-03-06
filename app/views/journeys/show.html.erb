@@ -1,0 +1,131 @@
+<script src="http://isithackday.com/hacks/geo/yql-geo-library/yqlgeo.js"></script>
+<script>
+    var end_lat;
+    var end_lon;
+
+    $(function(){
+        jQuery("#btnInit").click(initiate_geolocation);
+        // Grab end_lat and end_lng
+        end_lat = <%= @journey.end_lat %>;
+        end_lon = <%= @journey.end_lon %>;
+    })
+ 
+    function initiate_geolocation() {
+
+      var watchPositionId = 0;
+      var show_location;
+
+        if (navigator.geolocation)
+        {
+            navigator.geolocation.clearWatch(watchPositionId);
+            watchPositionId = navigator.geolocation.watchPosition(handle_geolocation_query, handle_errors);
+        }
+        else
+        {
+            yqlgeo.get('visitor', normalize_yql_response);
+        }
+    }
+ 
+    function handle_errors(error)
+    {
+        switch(error.code)
+        {
+            case error.PERMISSION_DENIED: alert("user did not share geolocation data");
+            break;
+ 
+            case error.POSITION_UNAVAILABLE: alert("could not detect current position");
+            break;
+ 
+            case error.TIMEOUT: alert("retrieving position timedout");
+            break;
+ 
+            default: alert("unknown error");
+            break;
+        }
+    }
+ 
+    function normalize_yql_response(response)
+    {
+        if (response.error)
+        {
+            var error = { code : 0 };
+            handle_error(error);
+            return;
+        }
+ 
+        var position = {
+            coords :
+            {
+                latitude: response.place.centroid.latitude,
+                longitude: response.place.centroid.longitude
+            },
+            address :
+            {
+                city: response.place.locality2.content,
+                region: response.place.admin1.content,
+                country: response.place.country.content
+            }
+        };
+ 
+        handle_geolocation_query(position);
+    }
+
+      var locationInfo;
+      
+
+      function handle_geolocation_query(position){
+          
+        var timestampDate = new Date(position.timestamp);
+          
+        locationInfo = position.coords.latitude + ", " + position.coords.longitude + '  --> Last Updated: ' + timestampDate.toLocaleString();
+        $('#locationDisplay').text(locationInfo);
+    
+        var earthRadius = 3961.3; // Radius of the earth in miles
+        var dLatitude = convertToRadian(end_lat - position.coords.latitude);
+        var dLongitude = convertToRadian(end_lon - position.coords.longitude);
+        var a = Math.sin(dLatitude / 2) * Math.sin(dLatitude / 2) + Math.cos(convertToRadian(position.coords.latitude)) * Math.cos(convertToRadian(end_lat)) * Math.sin(dLongitude / 2) * Math.sin(dLongitude / 2);
+        var greatCircleDistance = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var distance = earthRadius * greatCircleDistance;
+
+        // return distance;
+
+        // Check distance against alert_distance
+        if (distance < .1 ) {
+          console.log("PING");
+
+        } else {
+          console.log("Don't Ping Yet")
+
+        };
+
+        console.log('alert_distance = .1 miles')
+        console.log(distance + 'miles away');
+
+    }
+
+  function convertToRadian(numericDegree) {
+    return numericDegree * Math.PI / 180;
+  }
+    function showError(error) {
+    // to be completed
+  }
+</script>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<h1>I love maps!!</h1>
+Current Journey id: <%= @journey.id %>
+<br><br>
+Current Journey end_lat: <%= @journey.end_lat %>
+<br><br>
+Current Journey end_lon: <%= @journey.end_lon %>
+<br><br>
+
+<div>
+  <button id="btnInit" >Let's Get our Tracking On!</button><br>
+  <p>Oh hey there, again! Here's your current location: <span id="locationDisplay"></span></p>
+</div>
+
+
+
