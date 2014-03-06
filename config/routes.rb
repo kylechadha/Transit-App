@@ -4,7 +4,8 @@ TransitAppThree::Application.routes.draw do
 
   get 'journeys/selection', :to => "journeys#selection", as: "journeys_selection"
   get 'journeys/destination/:id', :to => "journeys#destination", as: "journeys_destination"
-  get 'journeys/preferences', :to => "journeys#preferences", as: "journeys_preferences"
+  get 'journeys/preferences/:id', :to => "journeys#preferences", as: "journeys_preferences"
+  get 'journeys/mapview/:id', :to => "journeys#mapview", as: "journeys_mapview"
 
   resources :welcome, only: [:index]
   resources :users, only: [:index, :show, :create, :new]

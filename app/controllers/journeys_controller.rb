@@ -56,16 +56,16 @@ class JourneysController < ApplicationController
 
   def update
     @journey = Journey.find(params[:id])
-    binding.pry
     if @journey.update(alert_distance: params[:journey][:alert_distance], alert_type: params[:journey][:alert_type])
-      binding.pry
-      redirect_to action: 'mapview'
+      redirect_to journeys_mapview_path(@journey.id)
     else
       render action: 'preferences'
     end
   end
 
   def mapview
+    @journey = Journey.find(params[:id])
+    @destination = Journey.destination(@journey.stop_id)
   end
 
   private
@@ -77,3 +77,5 @@ class JourneysController < ApplicationController
   end
 
 end
+
+# journeys_mapview_path(params[:id])
