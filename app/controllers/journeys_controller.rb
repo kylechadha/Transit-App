@@ -45,6 +45,7 @@ class JourneysController < ApplicationController
     @journey.save
   end
   
+  # Can potentially combine with the update action below
   def preferences
     @journey = Journey.find(params[:id])
     end_stop = Stop.find(params[:stop]).id
@@ -53,12 +54,26 @@ class JourneysController < ApplicationController
     @journey.update(stop_id: end_stop, end_lat: end_lat, end_lon: end_lon)
   end
 
+  def update
+    @journey = Journey.find(params[:id])
+    binding.pry
+    if @journey.update(alert_distance: params[:journey][:alert_distance], alert_type: params[:journey][:alert_type])
+      binding.pry
+      redirect_to action: 'mapview'
+    else
+      render action: 'preferences'
+    end
+  end
+
   def mapview
   end
 
   private
   def journey_params
-    params.permit(:id, :direction, :lat, :lon)
+    params.permit(:id, :direction, :lat, :lon, :alert_distance, :alert_type)
+    # Ideally you would have 
+    # params.require(:journey).permit(:id, :direction, :lat, :lon)
+    # And send all the params in journey ... but, we didn't
   end
 
 end
