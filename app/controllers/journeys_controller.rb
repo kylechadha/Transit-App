@@ -51,7 +51,9 @@ class JourneysController < ApplicationController
     end_lat = Stop.find(params[:stop]).lat
     end_lon = Stop.find(params[:stop]).lon
     @journey.update(stop_id: end_stop, end_lat: end_lat, end_lon: end_lon)
-    binding.pry
+  end
+
+  def mapview
   end
 
   private
