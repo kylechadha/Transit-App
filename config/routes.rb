@@ -1,5 +1,7 @@
 TransitAppThree::Application.routes.draw do
 
+  root 'journeys#selection'    
+
   get 'journeys/selection', :to => "journeys#selection", as: "journeys_selection"
   get 'journeys/destination/:id', :to => "journeys#destination", as: "journeys_destination"
   get 'journeys/preferences', :to => "journeys#preferences", as: "journeys_preferences"

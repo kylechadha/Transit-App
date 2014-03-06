@@ -45,6 +45,15 @@ class JourneysController < ApplicationController
     @journey.save
   end
   
+  def preferences
+    @journey = Journey.find(params[:id])
+    end_stop = Stop.find(params[:stop]).id
+    end_lat = Stop.find(params[:stop]).lat
+    end_lon = Stop.find(params[:stop]).lon
+    @journey.update(stop_id: end_stop, end_lat: end_lat, end_lon: end_lon)
+    binding.pry
+  end
+
   private
   def journey_params
     params.permit(:id, :direction, :lat, :lon)
