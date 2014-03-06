@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20140302191715) do
 
   create_table "alerts", force: true do |t|
     t.string   "alert_type"
-    t.integer  "alert_distance" # KB changed to integer from string
+    t.string   "alert_distance"
     t.integer  "journey_id"
     t.integer  "stop_time_id"
     t.datetime "created_at"

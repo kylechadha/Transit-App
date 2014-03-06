@@ -1,6 +1,6 @@
 class AlertsController < ApplicationController
   def index
-    @alerts = Alert.all
+    # @alerts = Alert.all
   end
 
   def show
@@ -11,15 +11,15 @@ class AlertsController < ApplicationController
 
   def create
     
-    @alert = Alert.new
+    # @alert = Alert.new
     
-    @alert.stop_id = 
-    @alert.end_stop_lat = @
-    @alert.end_stop_lon =  
+    # @alert.stop_id = 
+    # @alert.end_stop_lat = @
+    # @alert.end_stop_lon =  
     
-    @alert.save
+    # @alert.save
 
-    redirect_to 'alert_new_path'
+    # redirect_to 'alert_new_path'
 
   end
 end

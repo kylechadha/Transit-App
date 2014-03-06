@@ -1,0 +1,47 @@
+<!-- Required for geolocation tracking?? TBD -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<script>
+
+// FIGURE THIS OUT:
+var end_stop_geolocation[@journey.end_lat, @journey.end_lon];
+
+// FROM EXAMPLE
+function startTracking(end_stop_geolocation) {
+// Clear position watch
+  navigator.geolocation.clearWatch(watchPositionId);
+// Start watching location
+  watchPositionId = navigator.geolocation.watchPosition(show_rider_location, showError, { enableHighAccuracy: false, maximumAge: 60000, timeout: 30000 });
+}
+
+function showRiderLocation(position) {
+  // From Example
+  var currentDistance;
+  currentDistance = calculateDistance(position.coords.latitude, position.coords.longitude...figure out what goes);
+  var timestampDate = new Date(position.timestamp);
+  // From Example: show geolocation results
+  var geoloactionResults = "Position (latitude, longitude): " + position.coords.latitude + ', ' + position.coords.longitude;
+}
+
+function calculateDistance(@journey.end_lat, @journey.end_lon, position.coords.latitude, position.coords.longitude) {
+// Calculate distance between end stop and current location - Haversine formula
+
+  // FROM EXAMPLE
+  var earthRadius = 3961.3; // Radius of the earth in miles
+  var dLatitude = convertToRadian(@journey.end_lat - position.coords.latitude);
+  var dLongitude = convertToRadian(@journey.end_lon - position.coords.longitude);
+  var a = Math.sin(dLatitude / 2) * Math.sin(dLatitude / 2) + Math.cos(convertToRadian(position.coords.latitude)) * Math.cos(convertToRadian(@journey.end_lat)) * Math.sin(dLongitude / 2) * Math.sin(dLongitude / 2);
+  var greatCircleDistance = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var distance = earthRadius * greatCircleDistance; // distance converted to miles from radians
+  return distance;
+
+  // Check distance against alert_distance
+  if (distance < @journey.alert_distance) {
+    // PING
+    // cancel watch
+  };
+
+}
+
+</script>
+
+<h1>Journeys</h1>

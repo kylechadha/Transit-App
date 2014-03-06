@@ -12,6 +12,9 @@ class JourneysController < ApplicationController
   def create
     # Journey begins with click of the route direction
     @journey = Journey.new
+    binding.pry
+    @journey.name = @trip.headsign
+
     @journey.origin = [params[:lat], params[:lon]]
     
     @journey.first_lat = params[:lat]
