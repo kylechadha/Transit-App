@@ -17,6 +17,8 @@ Direction ID: <%= @trip.direction_id %><br><br>
 <h4>Holy crap somehow we found the sequence:</h4>
 <ul>
   <% @remaining_stops.each do |stops| %>
-  <li><strong><%= Stop.find(stops.stop_id).name %></strong> <%= Stop.find(stops.stop_id).desc %></li>
+    <%= link_to journeys_preferences_path do %>
+      <li><strong><%= Stop.find(stops.stop_id).name %></strong> <%= Stop.find(stops.stop_id).desc %></li>
+    <% end %>
   <% end %>
 </ul>
