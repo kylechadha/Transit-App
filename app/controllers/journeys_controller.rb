@@ -67,7 +67,6 @@ class JourneysController < ApplicationController
     @journey = Journey.find(params[:id])
   end
 
-  private
   def journey_params
     params.permit(:id, :direction, :lat, :lon, :alert_distance, :alert_type)
     # Ideally you would have 

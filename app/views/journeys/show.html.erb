@@ -1,11 +1,12 @@
 <script src="http://isithackday.com/hacks/geo/yql-geo-library/yqlgeo.js"></script>
 <script>
+
     var end_lat;
     var end_lon;
+    var alert_distance_integer;
 
     $(function(){
         jQuery("#btnInit").click(initiate_geolocation);
-        // Grab end_lat and end_lng
         end_lat = <%= @journey.end_lat %>;
         end_lon = <%= @journey.end_lon %>;
     })
@@ -87,18 +88,22 @@
         var greatCircleDistance = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         var distance = earthRadius * greatCircleDistance;
 
+
         // return distance;
 
         // Check distance against alert_distance
-        if (distance < .1 ) {
-          console.log("PING");
+        if (distance < 20 ) {
+
+          alert("It's time to start packing up. You will be at your stop shortly.");
+
+          // $.playSound('buzz');
 
         } else {
           console.log("Don't Ping Yet")
 
         };
 
-        console.log('alert_distance = .1 miles')
+        console.log('alert_distance set for 20 miles')
         console.log(distance + 'miles away');
 
     }
@@ -106,13 +111,8 @@
   function convertToRadian(numericDegree) {
     return numericDegree * Math.PI / 180;
   }
-    function showError(error) {
-    // to be completed
-  }
+
 </script>
-
-
-<html xmlns="http://www.w3.org/1999/xhtml">
 
 <h1>I love maps!!</h1>
 Current Journey id: <%= @journey.id %>
@@ -121,11 +121,17 @@ Current Journey end_lat: <%= @journey.end_lat %>
 <br><br>
 Current Journey end_lon: <%= @journey.end_lon %>
 <br><br>
+Current Journey alert_distance: <%= @journey.alert_distance %>
+<br><br>
+
+<br><br>
 
 <div>
   <button id="btnInit" >Let's Get our Tracking On!</button><br>
   <p>Oh hey there, again! Here's your current location: <span id="locationDisplay"></span></p>
 </div>
+
+<!-- show your google maps location and pull show.json.jbuilder :end_lat and :end_long-->
 
 
 
