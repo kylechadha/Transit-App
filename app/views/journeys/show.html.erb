@@ -134,56 +134,78 @@
         console.log(distance + 'miles away');
 
     // Google Maps
-        var myLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+        var currLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
         var endLatLng = new google.maps.LatLng(end_lat, end_lon);
 
         var mapOptions = {
-          center: myLatLng,
+          center: currLatLng,
           zoom: 14
         };
+
+        var marker_end;
+        var infowindow_end;
+        
+        var marker_current;
+        var infowindow_current;
 
         var map = new google.maps.Map(document.getElementById("map-canvas"),
             mapOptions);
 
         var marker_current = new google.maps.Marker({
-            position: myLatLng, 
+            position: currLatLng, 
             map: map,
             title: "My Current Location" });
+
+        var infowindow_current = new google.maps.InfoWindow({
+            content: '<div id="content">'+
+            '<p id="firstHeading" class="firstHeading">Current Location</p>'+'</div>'
+             });
 
         var marker_end = new google.maps.Marker({
             position: endLatLng, 
             map: map,
             title: "My Stop" });
+    
+        var infowindow_end = new google.maps.InfoWindow({
+            content: '<div id="content">'+
+            '<p id="firstHeading" class="firstHeading">End Stop Location</p>'+'</div>'
+             });
+    
+        google.maps.event.addListener(marker_end, 'click', function() {
+            infowindow_end.open(map,marker_end);
+        });
+
+        google.maps.event.addListener(marker_current, 'click', function() {
+            infowindow_current.open(map,marker_current);
+        });
+
     }
+    // Add markers link: http://wrightshq.com/playground/placing-multiple-markers-on-a-google-map-using-api-3/
 
   function convertToRadian(numericDegree) {
     return numericDegree * Math.PI / 180;
   }
-
+        
     google.maps.event.addDomListener(window, 'page:change', initiate_geolocation);
 
 </script>
 
 <h1>I love maps!!</h1>
 Current Journey id: <%= @journey.id %>
-<br><br>
+<br>
 Current Journey end_lat: <%= @journey.end_lat %>
-<br><br>
+<br>
 Current Journey end_lon: <%= @journey.end_lon %>
-<br><br>
+<br>
 Current Journey alert_distance: <%= @journey.alert_distance %>
-<br><br>
-
-<br><br>
-
 <div>
   <button id="btnInit" >Let's Get our Tracking On!</button><br>
+  <br>
   <p>Oh hey there, again! Here's your current location: <span id="locationDisplay"></span></p>
 </div>
-
-Track Your Ride
-<br><br>
+<br>
 <div id="map-canvas"></div>
 
 <!-- show your google maps location and pull show.json.jbuilder :end_lat and :end_long-->
