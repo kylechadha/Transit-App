@@ -1,14 +1,40 @@
+<style>
+  #map-canvas {
+      height: 500px;
+      width: 500px;
+      margin: 0 auto;
+  }
+</style>
+
 <script src="http://isithackday.com/hacks/geo/yql-geo-library/yqlgeo.js"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDw1Ba3y7gTlafSaFsLW7RmkOpmogonpw&sensor=false">
+</script>
+
 <script>
 
-    var end_lat;
+    var end_lat
     var end_lon;
     var alert_distance_integer;
 
     $(function(){
+        $.get("<%= journey_url(@journey.id) %>.json", function(data){
+            $( $("type-number[0]").html(data.journey.end_lat));
+            end_lat = data.journey.end_lat
+        });
+    });
+
+
+    $(function(){
+        $.get("<%= journey_url(@journey.id) %>.json", function(data){
+            $( $("type-number[1]").html(data.journey.end_lon));
+            end_lon = data.journey.end_lon
+        });
+    });
+
+    $(function(){
         jQuery("#btnInit").click(initiate_geolocation);
-        end_lat = <%= @journey.end_lat %>;
-        end_lon = <%= @journey.end_lon %>;
+        // end_lat = <%= @journey.end_lat %>;
+        // end_lon = <%= @journey.end_lon %>;
     })
  
     function initiate_geolocation() {
@@ -69,6 +95,7 @@
         };
  
         handle_geolocation_query(position);
+
     }
 
       var locationInfo;
@@ -92,7 +119,7 @@
         // return distance;
 
         // Check distance against alert_distance
-        if (distance < 20 ) {
+        if (distance < .50 ) {
 
           alert("It's time to start packing up. You will be at your stop shortly.");
 
@@ -103,14 +130,38 @@
 
         };
 
-        console.log('alert_distance set for 20 miles')
+        console.log('alert_distance set for 1/2 mile')
         console.log(distance + 'miles away');
 
+    // Google Maps
+        var myLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+        var endLatLng = new google.maps.LatLng(end_lat, end_lon);
+
+        var mapOptions = {
+          center: myLatLng,
+          zoom: 14
+        };
+
+        var map = new google.maps.Map(document.getElementById("map-canvas"),
+            mapOptions);
+
+        var marker_current = new google.maps.Marker({
+            position: myLatLng, 
+            map: map,
+            title: "My Current Location" });
+
+        var marker_end = new google.maps.Marker({
+            position: endLatLng, 
+            map: map,
+            title: "My Stop" });
     }
 
   function convertToRadian(numericDegree) {
     return numericDegree * Math.PI / 180;
   }
+
+    google.maps.event.addDomListener(window, 'page:change', initiate_geolocation);
 
 </script>
 
@@ -130,6 +181,10 @@ Current Journey alert_distance: <%= @journey.alert_distance %>
   <button id="btnInit" >Let's Get our Tracking On!</button><br>
   <p>Oh hey there, again! Here's your current location: <span id="locationDisplay"></span></p>
 </div>
+
+Track Your Ride
+<br><br>
+<div id="map-canvas"></div>
 
 <!-- show your google maps location and pull show.json.jbuilder :end_lat and :end_long-->
 
