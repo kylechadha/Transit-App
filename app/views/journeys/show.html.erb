@@ -1,10 +1,10 @@
 
 <style>
-  #map-canvas {
-      height: 500px;
-      width: 500px;
-      margin: 0 auto;
-  }
+#map-canvas {
+  height: 500px;
+  width: 500px;
+  margin: 0 auto;
+}
 </style>
 
 <script src="http://isithackday.com/hacks/geo/yql-geo-library/yqlgeo.js"></script>
@@ -13,103 +13,106 @@
 
 <script>
 
-    var end_lat
-    var end_lon;
-    var alert_distance_integer;
-    var buzz = new Audio(<% audio_tag "buzz.mp3" %>);
+var end_lat
+var end_lon;
+var alert_distance_integer;
+// var buzz = new Audio("buzz.mp3");
 
-    $(function(){
-        $.get("<%= journey_url(@journey.id) %>.json", function(data){
-            $( $("type-number[0]").html(data.journey.end_lat));
-            end_lat = data.journey.end_lat
-        });
+var currLatLng;
+var endLatLng;
+
+$(function(){
+    $.get("<%= journey_url(@journey.id) %>.json", function(data){
+        $( $("type-number[0]").html(data.journey.end_lat));
+        end_lat = data.journey.end_lat
     });
+});
 
 
-    $(function(){
-        $.get("<%= journey_url(@journey.id) %>.json", function(data){
-            $( $("type-number[1]").html(data.journey.end_lon));
-            end_lon = data.journey.end_lon
-        });
+$(function(){
+    $.get("<%= journey_url(@journey.id) %>.json", function(data){
+        $( $("type-number[1]").html(data.journey.end_lon));
+        end_lon = data.journey.end_lon
     });
+});
 
-    $(function(){
-        jQuery("#btnInit").click(initiate_geolocation);
+$(function(){
+    jQuery("#btnInit").click(initiate_geolocation);
         // end_lat = <%= @journey.end_lat %>;
         // end_lon = <%= @journey.end_lon %>;
         
-    })
- 
-    function initiate_geolocation() {
 
-      var watchPositionId = 0;
-      var show_location;
 
-        if (navigator.geolocation)
-        {
-            navigator.geolocation.clearWatch(watchPositionId);
-            watchPositionId = navigator.geolocation.watchPosition(handle_geolocation_query, handle_errors);
-        }
-        else
-        {
-            yqlgeo.get('visitor', normalize_yql_response);
-        }
-    }
- 
-    function handle_errors(error)
+function initiate_geolocation() {
+
+  var watchPositionId = 0;
+  var show_location;
+
+  if (navigator.geolocation)
+  {
+    navigator.geolocation.clearWatch(watchPositionId);
+    watchPositionId = navigator.geolocation.watchPosition(handle_geolocation_query, handle_errors);
+}
+else
+{
+    yqlgeo.get('visitor', normalize_yql_response);
+}
+}
+
+function handle_errors(error)
+{
+    switch(error.code)
     {
-        switch(error.code)
-        {
-            case error.PERMISSION_DENIED: alert("user did not share geolocation data");
-            break;
- 
-            case error.POSITION_UNAVAILABLE: alert("could not detect current position");
-            break;
- 
-            case error.TIMEOUT: alert("retrieving position timedout");
-            break;
- 
-            default: alert("unknown error");
-            break;
-        }
+        case error.PERMISSION_DENIED: alert("user did not share geolocation data");
+        break;
+
+        case error.POSITION_UNAVAILABLE: alert("could not detect current position");
+        break;
+
+        case error.TIMEOUT: alert("retrieving position timedout");
+        break;
+
+        default: alert("unknown error");
+        break;
     }
- 
-    function normalize_yql_response(response)
+}
+
+function normalize_yql_response(response)
+{
+    if (response.error)
     {
-        if (response.error)
-        {
-            var error = { code : 0 };
-            handle_error(error);
-            return;
-        }
- 
-        var position = {
-            coords :
-            {
-                latitude: response.place.centroid.latitude,
-                longitude: response.place.centroid.longitude
-            },
-            address :
-            {
-                city: response.place.locality2.content,
-                region: response.place.admin1.content,
-                country: response.place.country.content
-            }
-        };
- 
-        handle_geolocation_query(position);
-
+        var error = { code : 0 };
+        handle_error(error);
+        return;
     }
 
-      var locationInfo;
-      
+    var position = {
+        coords :
+        {
+            latitude: response.place.centroid.latitude,
+            longitude: response.place.centroid.longitude
+        },
+        address :
+        {
+            city: response.place.locality2.content,
+            region: response.place.admin1.content,
+            country: response.place.country.content
+        }
+    };
 
-      function handle_geolocation_query(position){
-          
-        var timestampDate = new Date(position.timestamp);
-          
-        locationInfo = position.coords.latitude + ", " + position.coords.longitude + '  --> Last Updated: ' + timestampDate.toLocaleString();
-        $('#locationDisplay').text(locationInfo);
+    handle_geolocation_query(position);
+
+}
+
+var locationInfo;
+
+
+function handle_geolocation_query(position){
+
+    var timestampDate = new Date(position.timestamp);
+
+    locationInfo = position.coords.latitude + ", " + position.coords.longitude + '  --> Last Updated: ' + timestampDate.toLocaleString();
+    $('#locationDisplay').text(locationInfo);
     
         var earthRadius = 3961.3; // Radius of the earth in miles
         var dLatitude = convertToRadian(end_lat - position.coords.latitude);
@@ -123,110 +126,106 @@
 
         // Check distance against alert_distance
         if (distance < .50 ) {
-
+            new Audio("/audios/buzz.mp3").play();
             alert("It's time to start packing up. You will be at your stop shortly.");
             
-            // Does not play sound, receives 304 No Modification Error
-            playBuzz(); // Function defined below
+            // // Does not play sound, receives 304 No Modification Error
+            // playBuzz(); // Function defined below
 
-            alert("passed over buzz");
+            // document.getElementById('audio').play();
 
 
         } else {
           console.log("Don't Ping Yet")
 
-        };
+      };
 
-        console.log('alert_distance set for 1/2 mile')
-        console.log(distance + 'miles away');
+      console.log('alert_distance set for 1/2 mile')
+      console.log(distance + 'miles away');
 
     // Google Maps
 
-        var currLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    var currLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-        var endLatLng = new google.maps.LatLng(end_lat, end_lon);
+    var endLatLng = new google.maps.LatLng(end_lat, end_lon);
 
-        var mapOptions = {
-          center: currLatLng,
-          zoom: 14
-        };
+    var mapOptions = {
+      center: currLatLng,
+      zoom: 14
+  };
 
-        var marker_end;
-        var infowindow_end;
-        
-        var marker_current;
-        var infowindow_current;
+  var marker_end;
+  var infowindow_end;
 
-        var map = new google.maps.Map(document.getElementById("map-canvas"),
-            mapOptions);
+  var marker_current;
+  var infowindow_current;
 
-        var marker_current = new google.maps.Marker({
-            position: currLatLng, 
-            map: map,
-            title: "My Current Location" });
+  var map = new google.maps.Map(document.getElementById("map-canvas"),
+    mapOptions);
 
-        var infowindow_current = new google.maps.InfoWindow({
-            content: '<div id="content">'+
-            '<p id="firstHeading" class="firstHeading">Current Location</p>'+'</div>'
-             });
+  var marker_current = new google.maps.Marker({
+    position: currLatLng, 
+    map: map,
+    title: "My Current Location" });
 
-        var marker_end = new google.maps.Marker({
-            position: endLatLng, 
-            map: map,
-            title: "My Stop" });
-    
-        var infowindow_end = new google.maps.InfoWindow({
-            content: '<div id="content">'+
-            '<p id="firstHeading" class="firstHeading">End Stop Location</p>'+'</div>'
-             });
-    
-        google.maps.event.addListener(marker_end, 'click', function() {
-            infowindow_end.open(map,marker_end);
-        });
+  var infowindow_current = new google.maps.InfoWindow({
+    content: '<div id="content">'+
+    '<p id="firstHeading" class="firstHeading">Current Location</p>'+'</div>'
+});
 
-        google.maps.event.addListener(marker_current, 'click', function() {
-            infowindow_current.open(map,marker_current);
-        });
+  var marker_end = new google.maps.Marker({
+    position: endLatLng, 
+    map: map,
+    title: "My Stop" });
 
-    }
+  var infowindow_end = new google.maps.InfoWindow({
+    content: '<div id="content">'+
+    '<p id="firstHeading" class="firstHeading">End Stop Location</p>'+'</div>'
+});
+
+  google.maps.event.addListener(marker_end, 'click', function() {
+    infowindow_end.open(map,marker_end);
+});
+
+  google.maps.event.addListener(marker_current, 'click', function() {
+    infowindow_current.open(map,marker_current);
+});
+
+}
     // Add markers link: http://wrightshq.com/playground/placing-multiple-markers-on-a-google-map-using-api-3/
 
-  function convertToRadian(numericDegree) {
-    return numericDegree * Math.PI / 180;
-  }
+    function convertToRadian(numericDegree) {
+        return numericDegree * Math.PI / 180;
+    }
 
     google.maps.event.addDomListener(window, 'page:change', initiate_geolocation);
 
-  function playBuzz() {
-    if ("Audio" in window) {
-        var a = new Audio(<% audio_tag "buzz.mp3" %>);
-        a.autoplay = true;
-        return;
-    }
-}  
+    function playBuzz() {
+        buzz.play();
+    }  
 
+    })
 
-</script>
-<!-- Audio tag referenced in script to source file  -->
-<audio id="audio" onload="playBuzz()"><%= audio_tag "buzz.mp3" %></audio>
+    </script>
+    <!-- <div onload="playBuzz()"> -->
+        <!-- Audio tag referenced in script to source file  -->
+        <!-- <audio id="audio"><%#= audio_tag "buzz.mp3" %></audio> -->
 
-<h1>I love maps!!</h1>
-Current Journey id: <%= @journey.id %>
-<br>
-Current Journey end_lat: <%= @journey.end_lat %>
-<br>
-Current Journey end_lon: <%= @journey.end_lon %>
-<br>
-Current Journey alert_distance: <%= @journey.alert_distance %>
-<div>
-  <button id="btnInit" >Let's Get our Tracking On!</button><br>
-  <br>
-  <p>Oh hey there, again! Here's your current location: <span id="locationDisplay"></span></p>
-</div>
-<br>
-<div id="map-canvas"></div>
-
-<!-- show your google maps location and pull show.json.jbuilder :end_lat and :end_long-->
-
+        <h1>I love maps!!</h1>
+        Current Journey id: <%= @journey.id %>
+        <br>
+        Current Journey end_lat: <%= @journey.end_lat %>
+        <br>
+        Current Journey end_lon: <%= @journey.end_lon %>
+        <br>
+        Current Journey alert_distance: <%= @journey.alert_distance %>
+        <div>
+          <button onclick="btnInit" >Let's Get our Tracking On!</button><br>
+          <br>
+          <p>Oh hey there, again! Here's your current location: <span id="locationDisplay"></span></p>
+      </div>
+      <br>
+      <div id="map-canvas"></div>
+  <!-- </div> -->
 
 
