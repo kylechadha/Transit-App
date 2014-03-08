@@ -1,3 +1,4 @@
+
 <style>
   #map-canvas {
       height: 500px;
@@ -15,6 +16,7 @@
     var end_lat
     var end_lon;
     var alert_distance_integer;
+    var buzz = new Audio(<% audio_tag "buzz.mp3" %>);
 
     $(function(){
         $.get("<%= journey_url(@journey.id) %>.json", function(data){
@@ -35,6 +37,7 @@
         jQuery("#btnInit").click(initiate_geolocation);
         // end_lat = <%= @journey.end_lat %>;
         // end_lon = <%= @journey.end_lon %>;
+        
     })
  
     function initiate_geolocation() {
@@ -121,9 +124,13 @@
         // Check distance against alert_distance
         if (distance < .50 ) {
 
-          alert("It's time to start packing up. You will be at your stop shortly.");
+            alert("It's time to start packing up. You will be at your stop shortly.");
+            
+            // Does not play sound, receives 304 No Modification Error
+            playBuzz(); // Function defined below
 
-          // $.playSound('buzz');
+            alert("passed over buzz");
+
 
         } else {
           console.log("Don't Ping Yet")
@@ -187,10 +194,21 @@
   function convertToRadian(numericDegree) {
     return numericDegree * Math.PI / 180;
   }
-        
+
     google.maps.event.addDomListener(window, 'page:change', initiate_geolocation);
 
+  function playBuzz() {
+    if ("Audio" in window) {
+        var a = new Audio(<% audio_tag "buzz.mp3" %>);
+        a.autoplay = true;
+        return;
+    }
+}  
+
+
 </script>
+<!-- Audio tag referenced in script to source file  -->
+<audio id="audio" onload="playBuzz()"><%= audio_tag "buzz.mp3" %></audio>
 
 <h1>I love maps!!</h1>
 Current Journey id: <%= @journey.id %>
